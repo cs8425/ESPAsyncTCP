@@ -22,7 +22,7 @@
 #ifndef ASYNCTCP_H_
 #define ASYNCTCP_H_
 
-#include <async_config.h>
+#include "async_config.h"
 #include "IPAddress.h"
 #include <functional>
 
@@ -31,6 +31,10 @@ extern "C" {
     #include "lwip/err.h"
     #include "lwip/pbuf.h"
 };
+
+#if !defined(UNUSED)
+#define UNUSED(x) (void)(x)
+#endif
 
 class AsyncClient;
 

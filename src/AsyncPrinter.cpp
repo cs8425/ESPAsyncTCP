@@ -87,6 +87,7 @@ int AsyncPrinter::connect(const char *host, uint16_t port){
 }
 
 void AsyncPrinter::_onConnect(AsyncClient *c){
+  UNUSED(c);
   if(_tx_buffer != NULL){
     cbuf *b = _tx_buffer;
     _tx_buffer = NULL;
@@ -180,8 +181,8 @@ void AsyncPrinter::_on_close(){
 }
 
 void AsyncPrinter::_attachCallbacks(){
-  _client->onPoll([](void *obj, AsyncClient* c){ ((AsyncPrinter*)(obj))->_sendBuffer(); }, this);
-  _client->onAck([](void *obj, AsyncClient* c, size_t len, uint32_t time){ ((AsyncPrinter*)(obj))->_sendBuffer(); }, this);
+  _client->onPoll([](void *obj, AsyncClient* c){ UNUSED(c); ((AsyncPrinter*)(obj))->_sendBuffer(); }, this);
+  _client->onAck([](void *obj, AsyncClient* c, size_t len, uint32_t time){ UNUSED(c); UNUSED(len); UNUSED(time); ((AsyncPrinter*)(obj))->_sendBuffer(); }, this);
   _client->onDisconnect([](void *obj, AsyncClient* c){ ((AsyncPrinter*)(obj))->_on_close(); delete c; }, this);
-  _client->onData([](void *obj, AsyncClient* c, void *data, size_t len){ ((AsyncPrinter*)(obj))->_onData(data, len); }, this);
+  _client->onData([](void *obj, AsyncClient* c, void *data, size_t len){ UNUSED(c); ((AsyncPrinter*)(obj))->_onData(data, len); }, this);
 }

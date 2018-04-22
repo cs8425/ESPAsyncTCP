@@ -286,6 +286,8 @@ size_t AsyncClient::ack(size_t len){
 // Private Callbacks
 
 err_t AsyncClient::_connected(void* pcb, err_t err){
+  UNUSED(err);
+
   _pcb = reinterpret_cast<tcp_pcb*>(pcb);
   if(_pcb){
     _pcb_busy = false;
@@ -366,6 +368,7 @@ void AsyncClient::_ssl_error(int8_t err){
 #endif
 
 err_t AsyncClient::_sent(tcp_pcb* pcb, uint16_t len) {
+  UNUSED(pcb);
   _rx_last_packet = millis();
   ASYNC_TCP_DEBUG("_sent: %u\n", len);
   _tx_unacked_len -= len;
@@ -380,6 +383,7 @@ err_t AsyncClient::_sent(tcp_pcb* pcb, uint16_t len) {
 }
 
 err_t AsyncClient::_recv(tcp_pcb* pcb, pbuf* pb, err_t err) {
+  UNUSED(err);
   if(pb == NULL){
     ASYNC_TCP_DEBUG("_recv: pb == NULL! Closing... %d\n", err);
     return _close();
@@ -423,6 +427,8 @@ err_t AsyncClient::_recv(tcp_pcb* pcb, pbuf* pb, err_t err) {
 }
 
 err_t AsyncClient::_poll(tcp_pcb* pcb){
+  UNUSED(pcb);
+
   // Close requested
   if(_close_pcb){
     _close_pcb = false;
@@ -481,6 +487,7 @@ void AsyncClient::_s_dns_found(const char *name, ip_addr_t *ipaddr, void *arg){
 #else
 void AsyncClient::_s_dns_found(const char *name, const ip_addr *ipaddr, void *arg){
 #endif
+  UNUSED(name);
   reinterpret_cast<AsyncClient*>(arg)->_dns_found(ipaddr);
 }
 
@@ -924,6 +931,7 @@ uint8_t AsyncServer::status(){
 }
 
 err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err){
+  UNUSED(err);
   if(_connect_cb){
 #if ASYNC_TCP_SSL_ENABLED
     if (_noDelay || _ssl_ctx)
