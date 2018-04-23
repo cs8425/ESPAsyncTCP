@@ -279,6 +279,7 @@ void AsyncTCPbuffer::_attachCallbacks() {
     DEBUG_ASYNC_TCP("[A-TCP] attachCallbacks\n");
 
     _client->onPoll([](void *obj, AsyncClient* c) {
+        UNUSED(c);
         AsyncTCPbuffer* b = ((AsyncTCPbuffer*)(obj));
         if((b->_TXbufferRead != NULL) && !b->_TXbufferRead->empty()) {
             b->_sendBuffer();
@@ -289,6 +290,9 @@ void AsyncTCPbuffer::_attachCallbacks() {
     }, this);
 
     _client->onAck([](void *obj, AsyncClient* c, size_t len, uint32_t time) {
+        UNUSED(c);
+        UNUSED(len);
+        UNUSED(time);
         DEBUG_ASYNC_TCP("[A-TCP] onAck\n");
         ((AsyncTCPbuffer*)(obj))->_sendBuffer();
     }, this);
@@ -308,11 +312,14 @@ void AsyncTCPbuffer::_attachCallbacks() {
     }, this);
 
     _client->onData([](void *obj, AsyncClient* c, void *buf, size_t len) {
+        UNUSED(c);
         AsyncTCPbuffer* b = ((AsyncTCPbuffer*)(obj));
         b->_rxData((uint8_t *)buf, len);
     }, this);
 
     _client->onTimeout([](void *obj, AsyncClient* c, uint32_t time){
+        UNUSED(obj);
+        UNUSED(time);
         DEBUG_ASYNC_TCP("[A-TCP] onTimeout\n");
         c->close();
     }, this);

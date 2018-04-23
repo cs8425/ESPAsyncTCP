@@ -199,9 +199,9 @@ void SyncClient::_attachCallbacks(){
 }
 
 void SyncClient::_attachCallbacks_AfterConnected(){
-  _client->onAck([](void *obj, AsyncClient* c, size_t len, uint32_t time){ ((SyncClient*)(obj))->_sendBuffer(); }, this);
-  _client->onData([](void *obj, AsyncClient* c, void *data, size_t len){ ((SyncClient*)(obj))->_onData(data, len); }, this);
-  _client->onTimeout([](void *obj, AsyncClient* c, uint32_t time){ c->close(); }, this);
+  _client->onAck([](void *obj, AsyncClient* c, size_t len, uint32_t time){ UNUSED(c); UNUSED(len); UNUSED(time); ((SyncClient*)(obj))->_sendBuffer(); }, this);
+  _client->onData([](void *obj, AsyncClient* c, void *data, size_t len){ UNUSED(c); ((SyncClient*)(obj))->_onData(data, len); }, this);
+  _client->onTimeout([](void *obj, AsyncClient* c, uint32_t time){ UNUSED(obj); UNUSED(time); c->close(); }, this);
 }
 
 void SyncClient::_attachCallbacks_Disconnect(){
